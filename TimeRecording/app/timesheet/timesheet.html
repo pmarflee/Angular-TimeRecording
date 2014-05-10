@@ -21,7 +21,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr data-ng-repeat="t in vm.timesheet | orderBy: TimeStart" ng-include="'timerecord.html'">
+                                    <tr data-ng-repeat="t in vm.timesheet | orderBy: TimeStart" ng-include src="'app/timesheet/timerecord.html'">
                                     </tr>
                                 </tbody>
                             </table>
@@ -37,37 +37,3 @@
         </div>
     </section>
 </section>
-
-<script type="text/ng-template" id="timerecord.html">
-	<td>
-		<span editable-text="t.Description" e-name="Description" e-form="rowform" onbeforesave="vm.checkDescription($data)" e-required>
-		{{ t.Description || 'empty' }}
-		</span>
-	</td>
-	<td>
-		<span editable-bstime="t.TimeFrom" e-name="TimeFrom" e-show-meridian="false" e-minute-step="10" e-form="rowform" e-required>
-		{{ (t.TimeFrom | date: "h:mm a") || 'empty' }}
-		</span>
-	</td>
-	<td>
-		<span editable-bstime="t.TimeTo" e-name="TimeTo" e-show-meridian="false" e-minute-step="10" e-form="rowform" e-required>
-		{{ (t.TimeTo | date: "h:mm a") || 'empty' }}
-		</span>
-	</td>
-	<td style="white-space: nowrap">
-		<!-- form -->
-		<form editable-form name="rowform" onbeforesave="vm.updateTimeRecord($data, t.Id, this)" 
-			ng-show="rowform.$visible" class="form-buttons form-inline" shown="vm.inserted == t">
-		<button type="submit" ng-disabled="rowform.$waiting" class="btn btn-primary">
-			update
-		</button>
-		<button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn btn-default">
-			cancel
-		</button>
-		</form>
-		<div class="buttons" ng-show="!rowform.$visible">
-		<button class="btn btn-primary" ng-click="rowform.$show()">edit</button>
-		<button class="btn btn-danger" ng-click="vm.deleteTimeRecord($index)">del</button>
-		</div>   
-	</td>
-</script>
