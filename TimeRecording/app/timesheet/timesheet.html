@@ -1,0 +1,70 @@
+﻿<section class="mainbar" data-ng-controller="timesheet as vm">
+    <section class="matter">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <div style="display: inline-block; min-height: 290px;">
+                        <datepicker ng-model="vm.selectedDate" class="well well-sm"></datepicker>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="widget wviolet">
+                        <div data-cc-widget-header title="Timesheet"
+                             allow-collapse="true"></div>
+                        <div class="widget-content text-center text-info">
+                            <table class="table table-condensed table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Description</th>
+                                        <th>Time From</th>
+                                        <th>Time To</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr data-ng-repeat="t in vm.timesheet | orderBy: TimeStart">
+                                        <td>
+                                            <span editable-text="t.Description" e-name="Description" e-form="rowform" onbeforesave="vm.checkDescription($data)" e-required>
+                                                {{ t.Description || 'empty' }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span editable-bstime="t.TimeFrom" e-name="TimeFrom" e-show-meridian="false" e-minute-step="10" e-form="rowform" e-required>
+                                                {{ (t.TimeFrom | date: "h:mm a") || 'empty' }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span editable-bstime="t.TimeTo" e-name="TimeTo" e-show-meridian="false" e-minute-step="10" e-form="rowform" e-required>
+                                                {{ (t.TimeTo | date: "h:mm a") || 'empty' }}
+                                            </span>
+                                        </td>
+                                        <td style="white-space: nowrap">
+                                            <!-- form -->
+                                            <form editable-form name="rowform" onbeforesave="vm.updateTimeRecord($data, t.Id, this)" 
+                                                  ng-show="rowform.$visible" class="form-buttons form-inline" shown="vm.inserted == t">
+                                                <button type="submit" ng-disabled="rowform.$waiting" class="btn btn-primary">
+                                                    update
+                                                </button>
+                                                <button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn btn-default">
+                                                    cancel
+                                                </button>
+                                            </form>
+                                            <div class="buttons" ng-show="!rowform.$visible">
+                                                <button class="btn btn-primary" ng-click="rowform.$show()">edit</button>
+                                                <button class="btn btn-danger" ng-click="vm.deleteTimeRecord($index)">del</button>
+                                            </div>   
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <button class="btn btn-primary" ng-click="vm.newTimeRecord()">Add row</button>
+                            <button class="btn btn-default" ng-click="vm.saveChanges()">Save</button>
+                        </div>
+                        <div class="widget-foot">
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</section>
