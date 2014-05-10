@@ -20,6 +20,7 @@
         vm.newTimeRecord = newTimeRecord;
         vm.deleteTimeRecord = deleteTimeRecord;
         vm.saveChanges = saveChanges;
+        vm.cancelEdit = cancelEdit;
         vm.inserted = null;
 
         $scope.$watch('vm.selectedDate', function() {
@@ -73,16 +74,16 @@
             vm.timesheet.push(vm.inserted);
         }
 
-        function updateTimeRecord(data, id, scope) {
+        function updateTimeRecord(data, id, rowform) {
             var error;
             if (data.TimeFrom >= data.TimeTo) {
                 error = 'Time From must be less than Time To';
-                scope.rowform.$setError('TimeFrom', error);
+                rowform.$setError('TimeFrom', error);
                 return error;
             }
             if (isOverlap(data, id)) {
                 error = 'Date ranges overlap';
-                scope.rowform.$setError('', error);
+                rowform.$setError('', error);
                 return error;
             }
 
@@ -97,6 +98,14 @@
             var item = vm.timesheet[index];
             removeItem(item);
             datacontext.deleteTimeRecord(item);
+        }
+
+        function cancelEdit(rowform, item) {
+            rowform.$cancel();
+            if (item == vm.inserted) {
+                removeItem(item);
+                datacontext.deleteTimeRecord(item);
+            }
         }
 
         function save(force) {
