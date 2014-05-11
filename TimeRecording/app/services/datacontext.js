@@ -20,8 +20,7 @@
 
         function getTimesheet(selectedDate) {
             // Yet another way to ask the same question
-            var tomorrow = new Date(selectedDate.getTime());
-            tomorrow.setDate(tomorrow.getDate() + 1);
+            var tomorrow = moment(selectedDate).add('d', 1)._d;
             var pred = breeze.Predicate.create('TimeFrom', 'ge', selectedDate)
                 .and('TimeFrom', 'lt', tomorrow),
                 query = breeze.EntityQuery

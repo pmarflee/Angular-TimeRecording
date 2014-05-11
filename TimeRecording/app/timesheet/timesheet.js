@@ -8,13 +8,12 @@
             log = getLogFn(controllerId),
             logSuccess = getLogFn(controllerId, 'logSuccess'),
             vm = this,
-            date = new Date(),
             editTimeRecord = null, // the record being edited at the moment
             suspendSave = false;
 
         vm.title = 'Timesheet';
         vm.timesheet = [];
-        vm.selectedDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+        vm.selectedDate = moment().startOf('day')._d;
         vm.checkDescription = checkDescription;
         vm.updateTimeRecord = updateTimeRecord;
         vm.newTimeRecord = newTimeRecord;
@@ -60,13 +59,12 @@
                     timeFromMax = timeFrom;
                 }
             }
-            timeFromMax = timeFromMax || new Date();
-            timeFrom = new Date(vm.selectedDate.getTime());
-            timeFrom.setHours(timeFromMax.getHours());
-            timeFrom.setMinutes(timeFromMax.getMinutes());
-            timeFrom.setSeconds(0);
-            timeTo = new Date(timeFrom.getTime());
-            timeTo.setHours(timeTo.getHours() + 1);
+            timeFromMax = moment(timeFromMax || new Date());
+            timeFrom = moment(vm.selectedDate)
+                .hours(timeFromMax.hours())
+                .minutes(timeFromMax.minutes())
+                .seconds(0);
+            timeTo = moment(timeFrom).add('h', 1);
             vm.inserted = datacontext.createTimeRecord({
                 TimeFrom: timeFrom,
                 TimeTo: timeTo
