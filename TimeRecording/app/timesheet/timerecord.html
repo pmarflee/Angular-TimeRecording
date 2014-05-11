@@ -1,5 +1,5 @@
 ﻿<td>
-    <span editable-text="t.Description" e-name="Description" e-form="rowform" onbeforesave="vm.checkDescription($data)" e-required>
+    <span editable-textarea="t.Description" e-name="Description" e-form="rowform" e-rows="3" e-cols="15" onbeforesave="vm.checkDescription($data)" e-required>
         {{ t.Description || 'empty' }}
     </span>
 </td>
