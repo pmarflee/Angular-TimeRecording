@@ -25,7 +25,7 @@
         </button>
     </form>
     <div class="buttons" ng-show="!rowform.$visible">
-        <button class="btn btn-primary" ng-click="rowform.$show()">edit</button>
+        <button class="btn btn-primary" ng-click="vm.startEdit(rowform)">edit</button>
         <button class="btn btn-danger" ng-click="vm.deleteTimeRecord($index)">del</button>
     </div>   
 </td>

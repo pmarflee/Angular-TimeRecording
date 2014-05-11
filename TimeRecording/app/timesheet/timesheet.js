@@ -19,8 +19,10 @@
         vm.newTimeRecord = newTimeRecord;
         vm.deleteTimeRecord = deleteTimeRecord;
         vm.saveChanges = saveChanges;
+        vm.startEdit = startEdit;
         vm.cancelEdit = cancelEdit;
         vm.inserted = null;
+        vm.inEditMode = false;
 
         $scope.$watch('vm.selectedDate', function() {
             getTimesheet();
@@ -47,9 +49,8 @@
             return null;
         }
 
-        ;
-
         function newTimeRecord() {
+            if (vm.inEditMode) return;
             var timeFrom,
                 timeFromMax = null,
                 timeTo;
@@ -70,6 +71,7 @@
                 TimeTo: timeTo
             });
             vm.timesheet.push(vm.inserted);
+            vm.inEditMode = true;
         }
 
         function updateTimeRecord(data, id, rowform) {
@@ -84,12 +86,14 @@
                 rowform.$setError('', error);
                 return error;
             }
-
+            vm.inEditMode = false;
             return true;
         }
 
         function saveChanges() {
-            save(true);
+            if (!vm.inEditMode) {
+                save(true);
+            }
         }
 
         function deleteTimeRecord(index) {
@@ -98,12 +102,20 @@
             datacontext.deleteTimeRecord(item);
         }
 
+        function startEdit(rowform) {
+            if (!vm.inEditMode) {
+                rowform.$show();
+                vm.inEditMode = true;
+            }
+        }
+
         function cancelEdit(rowform, item) {
             rowform.$cancel();
             if (item == vm.inserted) {
                 removeItem(item);
                 datacontext.deleteTimeRecord(item);
             }
+            vm.inEditMode = false;
         }
 
         function save(force) {
